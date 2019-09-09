@@ -1,4 +1,4 @@
-FROM php:7.1.12-apache
+FROM php:7.2-apache
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone
 
@@ -16,10 +16,13 @@ RUN a2enmod rewrite && \
 
 RUN apt-get update && apt-get install -y libbz2-dev libfreetype6-dev  \
     libjpeg62-turbo-dev libmcrypt-dev libpng-dev libmemcached-dev libicu-dev \
+    libzip-dev \
     libedit-dev libtidy-dev && rm -r /var/lib/apt/lists/*
 
 RUN docker-php-ext-install bcmath bz2 calendar exif gd gettext intl \
-    mcrypt mysqli opcache pdo pdo_mysql readline sockets tidy
+    mysqli opcache pdo pdo_mysql readline sockets tidy
 RUN pecl install redis-3.1.5 && \
     pecl install memcached-3.0.4 && \
-    docker-php-ext-enable redis memcached
+    pecl install mcrypt-1.0.1 && \
+    pecl install zlib zip && \
+    docker-php-ext-enable redis memcached zip mcrypt
