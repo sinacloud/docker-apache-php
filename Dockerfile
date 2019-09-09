@@ -26,3 +26,9 @@ RUN pecl install redis-3.1.5 && \
     pecl install mcrypt-1.0.1 && \
     pecl install zlib zip && \
     docker-php-ext-enable redis memcached zip mcrypt
+
+RUN echo '\
+post_max_size = 160M\n\
+upload_max_filesize = 128M\n\
+memory_limit = 256M\n\
+' >> /usr/local/etc/php/php.ini
